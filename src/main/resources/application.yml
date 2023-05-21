@@ -1,0 +1,7 @@
+spring:
+  data:
+    mongodb:
+      database: 'PRENOTAZIONE_ESAMI_ASL'
+  mvc:
+    pathmatch:
+      matching-strategy: ant_path_matcher
