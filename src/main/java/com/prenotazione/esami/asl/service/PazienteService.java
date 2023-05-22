@@ -6,8 +6,8 @@ import java.text.ParseException;
 import java.util.Optional;
 
 public interface PazienteService {
-    Paziente inserisciPaziente(Paziente p) throws ParseException;
-    Optional<Paziente> cercaPaziente(String codiceFiscale);
-    Paziente cancellaPaziente(String codiceFiscale);
-    Paziente aggiornaPaziente(String codiceFiscale, Paziente p);
+    Paziente inserisciPaziente(Paziente p) throws Exception;
+    Optional<Paziente> cercaPaziente(String codiceFiscale) throws Exception;
+    Paziente cancellaPaziente(String codiceFiscale) throws Exception;
+    Paziente aggiornaPaziente(String codiceFiscale, Paziente p) throws Exception;
 }

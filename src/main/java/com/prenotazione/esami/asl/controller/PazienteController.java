@@ -10,6 +10,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
+import javax.validation.Valid;
 import java.text.ParseException;
 import java.util.Optional;
 
@@ -22,14 +23,14 @@ public class PazienteController {
 
     @PostMapping(value = "/inserisciPaziente")
     @ApiOperation("Inserisce un nuovo paziente")
-    public Paziente inserisciPaziente(@RequestBody @Validated Paziente paziente) throws ParseException {
+    public Paziente inserisciPaziente(@RequestBody Paziente paziente) throws Exception {
         log.info("Inserimento paziente");
         return service.inserisciPaziente(paziente);
     }
 
     @GetMapping(value = "/cercaPaziente/{codiceFiscale}")
     @ApiOperation("Cerca un paziente tramite il suo codice fiscale")
-    Paziente cercaPaziente(@PathVariable String codiceFiscale) {
+    Paziente cercaPaziente(@PathVariable String codiceFiscale) throws Exception {
         log.info("Cerca paziente tramite codice fiscale: {}", codiceFiscale);
         Optional<Paziente> pazienteTrovato = service.cercaPaziente(codiceFiscale);
         return pazienteTrovato.orElseGet(() -> (Paziente) ResponseEntity.notFound());
@@ -37,7 +38,7 @@ public class PazienteController {
 
     @DeleteMapping(value = "/cancellaPaziente/{codiceFiscale}")
     @ApiOperation("Cancella un paziente")
-    ResponseEntity<String> cancellaPaziente(@PathVariable String codiceFiscale) {
+    ResponseEntity<String> cancellaPaziente(@PathVariable String codiceFiscale) throws Exception {
         log.info("Cancella paziente tramite codice fiscale: {}", codiceFiscale);
         Paziente p = service.cancellaPaziente(codiceFiscale);
         if (p != null) {
@@ -51,7 +52,7 @@ public class PazienteController {
 
     @PutMapping(value = "/aggiornaPaziente/{codiceFiscale}")
     @ApiOperation("Aggiorna un paziente")
-    ResponseEntity<String> aggiornaPaziente(@PathVariable String codiceFiscale, @RequestBody Paziente paziente) {
+    ResponseEntity<String> aggiornaPaziente(@PathVariable String codiceFiscale, @RequestBody Paziente paziente) throws Exception {
         log.info("Aggiorna paziente tramite codice fiscale: {}", codiceFiscale);
         Paziente updatedPaziente = service.aggiornaPaziente(codiceFiscale, paziente);
         if (updatedPaziente != null) {
