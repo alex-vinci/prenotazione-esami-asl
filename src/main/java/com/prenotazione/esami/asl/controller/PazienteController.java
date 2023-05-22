@@ -5,6 +5,7 @@ import com.prenotazione.esami.asl.service.PazienteService;
 import io.swagger.annotations.ApiOperation;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
@@ -36,23 +37,28 @@ public class PazienteController {
 
     @DeleteMapping(value = "/cancellaPaziente/{codiceFiscale}")
     @ApiOperation("Cancella un paziente")
-    Paziente cancellaPaziente(@PathVariable String codiceFiscale) {
+    ResponseEntity<String> cancellaPaziente(@PathVariable String codiceFiscale) {
         log.info("Cancella paziente tramite codice fiscale: {}", codiceFiscale);
         Paziente p = service.cancellaPaziente(codiceFiscale);
         if (p != null) {
-            return p;
+            return ResponseEntity.status(HttpStatus.OK)
+                    .body("Cancellazione effettuata con successo");
+        } else {
+            return ResponseEntity.status(HttpStatus.NOT_FOUND)
+                    .body("Impossibile cancellare: paziente con codice fiscale: " + codiceFiscale + "non trovato");
         }
-        return (Paziente) ResponseEntity.notFound();
     }
 
     @PutMapping(value = "/aggiornaPaziente/{codiceFiscale}")
     @ApiOperation("Aggiorna un paziente")
-    Paziente aggiornaPaziente(@PathVariable String codiceFiscale, @RequestBody Paziente paziente) {
+    ResponseEntity<String> aggiornaPaziente(@PathVariable String codiceFiscale, @RequestBody Paziente paziente) {
         log.info("Aggiorna paziente tramite codice fiscale: {}", codiceFiscale);
         Paziente updatedPaziente = service.aggiornaPaziente(codiceFiscale, paziente);
         if (updatedPaziente != null) {
-            return updatedPaziente;
+            return ResponseEntity.status(HttpStatus.OK)
+                    .body("Update effettuato con successo" + updatedPaziente);
         }
-        return (Paziente) ResponseEntity.notFound();
+        return ResponseEntity.status(HttpStatus.NOT_FOUND)
+                .body("Impossibile aggiornare: paziente con codice fiscale: " + codiceFiscale + "non trovato");
     }
 }
